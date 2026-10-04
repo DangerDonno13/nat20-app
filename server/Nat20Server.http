@@ -1,0 +1,6 @@
+@Nat20Server_HostAddress = http://localhost:5009
+
+GET {{Nat20Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
