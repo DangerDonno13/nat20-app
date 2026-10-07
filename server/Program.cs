@@ -1,40 +1,49 @@
-using MongoDB.Bson;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using System.Text.Json;
+using Nat20Server.Database;
+using Nat20Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Retrieves the connection string from configuration
-var connectionString = builder.Configuration.GetConnectionString("MongoDB");
+builder.Services.Configure<DatabaseSettings>(
+    builder.Configuration.GetSection("MongoDb"));
+
+builder.Services.AddSingleton<IMongoClient>(sp =>
+{
+    var settings = sp
+        .GetRequiredService<IOptions<DatabaseSettings>>()
+        .Value;
+
+    return new MongoClient(settings.ConnectionString);
+});
+
+builder.Services.AddSingleton<IMongoDatabase>(sp =>
+{
+    var client = sp.GetRequiredService<IMongoClient>();
+
+    var settings = sp
+        .GetRequiredService<IOptions<DatabaseSettings>>()
+        .Value;
+
+    return client.GetDatabase(settings.DatabaseName);
+});
+
+builder.Services.AddScoped<UserService>();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.MapGet("/test-db", async () =>
+if (app.Environment.IsDevelopment())
 {
-    if (string.IsNullOrWhiteSpace(connectionString))
-    {
-        return Results.Problem("MongoDB connection string is missing from configuration.");
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-    try
-    {
-        // Initialize the MongoDB client
-        var client = new MongoClient(connectionString);
+app.UseHttpsRedirection();
 
-        // Send a ping command to the 'admin' database to verify connectivity
-        var database = client.GetDatabase("admin");
-        var pingResult = await database.RunCommandAsync<BsonDocument>(new BsonDocument("ping", 1));
-
-        return Results.Ok(new
-        {
-            Message = "Successfully connected to MongoDB Atlas!",
-            PingResponse = pingResult.ToString()
-        });
-    }
-    catch (Exception ex)
-    {
-        return Results.Problem($"Failed to connect to MongoDB: {ex.Message}");
-    }
-});
+app.MapControllers();
 
 app.Run();
