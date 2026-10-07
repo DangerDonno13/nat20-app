@@ -18,8 +18,9 @@ namespace Nat20Server.Services
             return await _usersCollection.Find(user => user.Email == email).FirstOrDefaultAsync();
         }
 
-        public async Task CreateUserAsync(User user)
+        public async Task CreateUserAsync(User user, string rawPassword)
         {
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(rawPassword);
             await _usersCollection.InsertOneAsync(user);
         }
     }

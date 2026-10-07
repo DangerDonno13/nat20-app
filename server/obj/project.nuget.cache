@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "4uKHYgxEhUE=",
+  "dgSpecHash": "sO49AiDarkQ=",
   "success": true,
   "projectFilePath": "C:\\INFO5103\\nat20-app\\server\\Nat20Server.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\amonr\\.nuget\\packages\\bcrypt.net-next\\4.2.0\\bcrypt.net-next.4.2.0.nupkg.sha512",
     "C:\\Users\\amonr\\.nuget\\packages\\dnsclient\\1.6.1\\dnsclient.1.6.1.nupkg.sha512",
     "C:\\Users\\amonr\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.12\\microsoft.aspnetcore.openapi.10.0.12.nupkg.sha512",
     "C:\\Users\\amonr\\.nuget\\packages\\microsoft.extensions.apidescription.server\\10.0.0\\microsoft.extensions.apidescription.server.10.0.0.nupkg.sha512",
