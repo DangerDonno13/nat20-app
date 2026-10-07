@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Nat20Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aa0c9cd9e93652b47254d7e8c703c85daca13450")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3544efa463ec2d0dbe23dc04d4efbe27d569dcb2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Nat20Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Nat20Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

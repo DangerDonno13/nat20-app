@@ -42,3 +42,4 @@ C:\INFO5103\nat20-app\server\obj\Debug\net10.0\ref\Nat20Server.dll
 C:\INFO5103\nat20-app\server\bin\Debug\net10.0\Swashbuckle.AspNetCore.Swagger.dll
 C:\INFO5103\nat20-app\server\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\INFO5103\nat20-app\server\bin\Debug\net10.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\INFO5103\nat20-app\server\bin\Debug\net10.0\BCrypt-Net-Next.dll

@@ -1,22 +1,6 @@
 [
   {
     "ContainingType": "Nat20Server.Controllers.UserController",
-    "Method": "CreateUser",
-    "RelativePath": "api/user",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "user",
-        "Type": "Nat20Server.Entities.User",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Nat20Server.Controllers.UserController",
     "Method": "GetUserByEmail",
     "RelativePath": "api/user/{email}",
     "HttpMethod": "GET",
@@ -26,6 +10,38 @@
       {
         "Name": "email",
         "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Nat20Server.Controllers.UserController",
+    "Method": "Login",
+    "RelativePath": "api/user/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Nat20Server.DTOs.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Nat20Server.Controllers.UserController",
+    "Method": "Register",
+    "RelativePath": "api/user/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Nat20Server.DTOs.RegisterRequest",
         "IsRequired": true
       }
     ],
