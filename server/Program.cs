@@ -34,6 +34,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Allow CORS from React client.
+var myAllowSpecificOrigin = "_myAllowSpecificOrigin";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(myAllowSpecificOrigin, policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -43,6 +56,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(myAllowSpecificOrigin);
 
 app.MapControllers();
 
