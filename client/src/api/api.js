@@ -5,9 +5,7 @@
 // date:    2026/10/12
 //---------------------------------------------------------------------------//
 
-import "dotenv/config";
-
-const SERVER_URL = process.env.SERVER_URL;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || process.env.SERVER_URL || "http://localhost:5009";
 
 /**
  * Sends HTTP request to server and returns response data.
@@ -26,11 +24,19 @@ const request = async (path, options = {}) => {
     },
   });
 
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
+  const text = await response.text();
+  let data = text;
+  try {
+    data = JSON.parse(text);
+  } catch (err) {
+    // plain text response from server
   }
 
-  return response.json();
+  if (!response.ok) {
+    throw new Error(data || `Request failed: ${response.status}`);
+  }
+
+  return data;
 };
 
 /**
@@ -46,5 +52,21 @@ export const api = {
    */
   async getUserByEmail(email) {
     return request(`/api/user/${encodeURIComponent(email)}`);
+  },
+
+  // sends register info to server
+  async registerUser(username, email, password) {
+    return request(`/api/user/register`, {
+      method: "POST",
+      body: JSON.stringify({ username, email, password }),
+    });
+  },
+
+  // sends login info to server and recieves token + user
+  async loginUser(email, password) {
+    return request(`/api/user/login`, {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+    });
   },
 };

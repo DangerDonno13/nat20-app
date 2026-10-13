@@ -1,5 +1,9 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout from "./components/Layout.js";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout.js';
+import Home from './components/Home.js';
+import Login from './components/Login.js';
+import Register from './components/Register.js';
+
 
 // main app functon for the routes
 function App() {
@@ -7,12 +11,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<div>home page placeholder</div>} />
-          <Route path="login" element={<div>login page placeholder</div>} />
-          <Route
-            path="register"
-            element={<div>account creation placeholder</div>}
-          />
+          <Route index element={<Home />} />
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
         </Route>
       </Routes>
     </BrowserRouter>
