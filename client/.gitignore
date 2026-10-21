@@ -21,3 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+# .NET build output
+bin/
+obj/
+*.dll
+*.exe
+*.pdb

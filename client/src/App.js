@@ -3,7 +3,7 @@ import Layout from './components/Layout.js';
 import Home from './components/Home.js';
 import Login from './components/Login.js';
 import Register from './components/Register.js';
-
+import DiceRoller from './components/DiceRoller.js';
 
 // main app functon for the routes
 function App() {
@@ -14,6 +14,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="dice" element={<DiceRoller />} />
         </Route>
       </Routes>
     </BrowserRouter>
