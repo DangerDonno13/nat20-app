@@ -29,6 +29,7 @@ builder.Services.AddSingleton<IMongoDatabase>(sp =>
 });
 
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<CampaignService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

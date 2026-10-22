@@ -29,15 +29,18 @@ namespace Nat20Server.Services
         /// Creates a new campaign in the database.
         /// </summary>
         /// <param name="campaign">The campaign to create.</param>
-        public async Task CreateCampaignAsync(CampaignDto campaign)
+        /// <param name="ownerId">The ID of the user who owns the campaign.</param>
+        public async Task<Campaign> CreateCampaignAsync(CampaignDto campaign, string ownerId)
         {
             var campaignEntity = new Campaign
             {
                 Name = campaign.Name,
                 Description = campaign.Description,
-                Setting = campaign.Setting
+                Setting = campaign.Setting,
+                OwnerId = ownerId
             };
             await _campaignsCollection.InsertOneAsync(campaignEntity);
+            return campaignEntity;
         }
     }
 }

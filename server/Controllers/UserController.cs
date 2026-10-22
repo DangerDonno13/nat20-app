@@ -12,7 +12,7 @@ namespace Nat20Server.Controllers
     /// </summary>
     [ApiController]
     [Route("api/user")]
-    public class UserController : Controller
+    public class UserController : ControllerBase
     {
         private readonly UserService _userService;
 
@@ -34,7 +34,7 @@ namespace Nat20Server.Controllers
             {
                 return NotFound();
             }
-            return Ok(user);
+            return Ok(user.ToPublicDto());
         }
 
         /// <summary>

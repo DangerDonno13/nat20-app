@@ -29,7 +29,6 @@ namespace Nat20Server.Entities
 
         [BsonRepresentation(BsonType.String)]
         public CampaignStatus Status { get; set; } = CampaignStatus.Active;
-        public string InviteCode { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
