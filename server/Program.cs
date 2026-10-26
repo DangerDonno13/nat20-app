@@ -28,6 +28,8 @@ builder.Services.AddSingleton<IMongoDatabase>(sp =>
     return client.GetDatabase(settings.DatabaseName);
 });
 
+builder.Services.AddSingleton<RuleService>();
+
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CampaignService>();
 
