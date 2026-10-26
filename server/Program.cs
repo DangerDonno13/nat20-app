@@ -72,6 +72,9 @@ builder.Services
 builder.Services.AddAuthorization();
 
 builder.Services.AddSingleton<TokenService>();
+builder.Services.AddSingleton<RuleService>();
+
+
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CampaignService>();
 
