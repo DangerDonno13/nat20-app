@@ -1,13 +1,33 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-velvet: #1a0808;
+  --bg-card: #250d0d;
+  --accent-black: #0d0101;
+  --accent-gold: #d4af37;
+  --accent-gold-hover: #f1c40f;
+  --text-main: #f5eedb;
+  --text-muted: #9e8e7e;
+  --border-thick: 2px solid #5a1e1e;
+  --border-subtle: 1px solid #3d1414;
+}
+
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  padding: 0;
+  background-color: var(--bg-velvet);
+  color: var(--text-main);
+  font-family: 'MedievalSharp', -apple-system, BlinkMacSystemFont, 'Segoe UI', cursive, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
