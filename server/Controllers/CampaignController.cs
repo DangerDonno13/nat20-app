@@ -47,7 +47,7 @@ namespace Nat20Server.Controllers
         /// <summary>
         /// Creates a new campaign owned by the authenticated user.
         /// </summary>
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateCampaignAsync([FromBody] CampaignDto campaignDto)
         {
             var userId = User.GetUserId();

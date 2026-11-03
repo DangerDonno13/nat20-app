@@ -93,4 +93,12 @@ export const api = {
       body: JSON.stringify({ email, password }),
     });
   },
+
+  // sends campaign creation info to server
+  async createCampaign(name, description, setting) {
+    return request(`/api/campaign/create`, {
+      method: "POST",
+      body: JSON.stringify({name, description, setting})
+    });
+  },
 };

@@ -4,6 +4,7 @@ import Home from './components/Home.js';
 import Login from './components/Login.js';
 import Register from './components/Register.js';
 import DiceRoller from './components/DiceRoller.js';
+import CreateCampaign from './components/CreateCampaign.js';
 
 // main app functon for the routes
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="dice" element={<DiceRoller />} />
+          <Route path="createCampaign" element={<CreateCampaign />} />
         </Route>
       </Routes>
     </BrowserRouter>
