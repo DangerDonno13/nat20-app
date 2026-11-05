@@ -14,10 +14,12 @@ namespace Nat20Server.Controllers
     [Route("api/campaign")]
     public class CampaignController : ControllerBase
     {
+        private readonly UserService _userService;
         private readonly CampaignService _campaignService;
 
-        public CampaignController(CampaignService campaignService)
+        public CampaignController(UserService userService, CampaignService campaignService)
         {
+            _userService = userService;
             _campaignService = campaignService;
         }
 
@@ -45,6 +47,21 @@ namespace Nat20Server.Controllers
         }
 
         /// <summary>
+        /// Retrieves all campaigns owned by or shared with the user.
+        /// </summary>
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllCampaignsById()
+        {
+            var userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var campaigns = await _campaignService.GetAllCampaignsByIdAsync(userId);
+            return Ok(campaigns);
+        }
+
+        /// <summary>
         /// Creates a new campaign owned by the authenticated user.
         /// </summary>
         [HttpPost("create")]
@@ -58,6 +75,32 @@ namespace Nat20Server.Controllers
 
             var campaign = await _campaignService.CreateCampaignAsync(campaignDto, userId);
             return CreatedAtAction(nameof(GetCampaignById), new { id = campaign.Id }, campaign);
+        }
+
+        [HttpPost("{campaignId}/share/{userEmail}")]
+        public async Task<IActionResult> ShareCampaign(string campaignId,[FromBody] string userEmail)
+        {
+            var userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var campaign = await _campaignService.GetCampaignByIdAsync(campaignId);
+            if (campaign == null || campaign.OwnerId != userId)
+            {
+                return NotFound();
+            }
+
+            var targetUser = await _userService.GetUserByEmailAsync(userEmail);
+            if (targetUser == null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            await _campaignService.ShareCampaign(campaign, targetUser.Id);
+
+            return Ok();
         }
     }
 }

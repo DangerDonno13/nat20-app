@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using Nat20Server.DTOs;
 using Nat20Server.Entities;
+using Nat20Server.Mappings;
 
 namespace Nat20Server.Services
 {
@@ -26,6 +27,22 @@ namespace Nat20Server.Services
         }
 
         /// <summary>
+        /// Retrieves all campaigns associated with a specific user, including both owned and shared campaigns.
+        /// </summary>
+        /// <param name="userId">The ID of the user for whom to retrieve campaigns.</param>
+        /// <returns>A response containing the user's owned and shared campaigns.</returns>
+        public async Task<UserCampaignsResponseDto> GetAllCampaignsByIdAsync(string userId)
+        {
+            var campaigns = await _campaignsCollection.Find(c => c.OwnerId == userId || c.PlayerIds.Contains(userId)).ToListAsync();
+
+            return new UserCampaignsResponseDto
+            {
+                OwnedCampaigns = campaigns.Where(c => c.OwnerId == userId).Select(c => c.ToDto()).ToList(),
+                SharedCampaigns = campaigns.Where(c => c.PlayerIds.Contains(userId)).Select(c => c.ToDto()).ToList()
+            };
+        }
+
+        /// <summary>
         /// Creates a new campaign in the database.
         /// </summary>
         /// <param name="campaign">The campaign to create.</param>
@@ -41,6 +58,13 @@ namespace Nat20Server.Services
             };
             await _campaignsCollection.InsertOneAsync(campaignEntity);
             return campaignEntity;
+        }
+
+        public async Task ShareCampaign(Campaign campaign, string userId)
+        {
+            campaign.PlayerIds.Add(userId);
+            var update = Builders<Campaign>.Update.Set(c => c.PlayerIds, campaign.PlayerIds);
+            await _campaignsCollection.UpdateOneAsync(c => c.Id == campaign.Id, update);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Nat20Server.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Nat20Server.DTOs
 {
@@ -8,5 +9,6 @@ namespace Nat20Server.DTOs
         public string Name { get; set; } = null!;
         public string Description { get; set; } = string.Empty;
         public string Setting { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
     }
 }
