@@ -5,9 +5,19 @@ namespace Nat20Server.Entities
 {
     public enum CampaignStatus
     {
+        Unspecified = 0,
         Active,
         Inactive,
         Completed
+    }
+
+    public enum CampaignSetting
+    {
+        Unspecified = 0,
+        ForgottenRealms,
+        Eberron,
+        Homebrew,
+
     }
 
     // This class represents a campaign entity in the application.
@@ -19,7 +29,7 @@ namespace Nat20Server.Entities
 
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public string Setting { get; set; } = string.Empty;
+        public CampaignSetting Setting { get; set; } = CampaignSetting.Unspecified;
 
         [BsonRepresentation(BsonType.ObjectId)]
         public string OwnerId { get; set; } = null!;
@@ -28,7 +38,7 @@ namespace Nat20Server.Entities
         public List<string> PlayerIds { get; set; } = new List<string>();
 
         [BsonRepresentation(BsonType.String)]
-        public CampaignStatus Status { get; set; } = CampaignStatus.Active;
+        public CampaignStatus Status { get; set; } = CampaignStatus.Unspecified;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
