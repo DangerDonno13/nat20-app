@@ -94,6 +94,10 @@ export const api = {
     });
   },
 
+  async getCampaigns(){
+    return request(`/api/campaign/all`);
+  },
+
   // sends campaign creation info to server
   async createCampaign(name, description, setting) {
     return request(`/api/campaign/create`, {

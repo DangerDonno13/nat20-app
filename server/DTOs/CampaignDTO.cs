@@ -8,7 +8,7 @@ namespace Nat20Server.DTOs
         [Required]
         public string Name { get; set; } = null!;
         public string Description { get; set; } = string.Empty;
-        public string Setting { get; set; } = string.Empty;
-        public string Status { get; set; } = string.Empty;
+        public CampaignSetting Setting { get; set; } = CampaignSetting.Unspecified;
+        public CampaignStatus Status { get; set; } = CampaignStatus.Unspecified;
     }
 }

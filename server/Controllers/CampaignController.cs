@@ -77,7 +77,7 @@ namespace Nat20Server.Controllers
             return CreatedAtAction(nameof(GetCampaignById), new { id = campaign.Id }, campaign);
         }
 
-        [HttpPost("{campaignId}/share/{userEmail}")]
+        [HttpPost("share")]
         public async Task<IActionResult> ShareCampaign(string campaignId,[FromBody] string userEmail)
         {
             var userId = User.GetUserId();

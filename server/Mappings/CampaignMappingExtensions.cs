@@ -12,7 +12,7 @@ namespace Nat20Server.Mappings
                 Name = campaign.Name,
                 Description = campaign.Description,
                 Setting = campaign.Setting,
-                Status = campaign.Status.ToString()
+                Status = campaign.Status
             };
         }
     }
