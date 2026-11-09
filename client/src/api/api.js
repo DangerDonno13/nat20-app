@@ -5,7 +5,10 @@
 // date:    2026/10/12
 //---------------------------------------------------------------------------//
 
-const SERVER_URL = process.env.REACT_APP_SERVER_URL || process.env.SERVER_URL || "http://localhost:5009";
+const SERVER_URL =
+  process.env.REACT_APP_SERVER_URL ||
+  process.env.SERVER_URL ||
+  "http://localhost:5009";
 
 /**
  * Sends HTTP request to server and returns response data.
@@ -13,7 +16,7 @@ const SERVER_URL = process.env.REACT_APP_SERVER_URL || process.env.SERVER_URL ||
  * Attaches the saved JWT as a Bearer token unless skipAuth is set (login/register).
  * If the server rejects a token we sent (expired/invalid), the saved session is
  * cleared and the user is sent back to the login page.
- * 
+ *
  * @param {string} path The API path to request from.
  * @param {Object} options Optional configuration (e.g., method, body, headers).
  *
@@ -23,7 +26,6 @@ const request = async (path, options = {}) => {
   const { skipAuth = false, headers, ...fetchOptions } = options;
 
   const token = skipAuth ? null : localStorage.getItem("token");
-
 
   const response = await fetch(`${SERVER_URL}${path}`, {
     ...fetchOptions,
@@ -42,7 +44,6 @@ const request = async (path, options = {}) => {
     throw new Error("Your session has expired. Please log in again.");
   }
 
-
   const text = await response.text();
   let data = text;
   try {
@@ -53,10 +54,10 @@ const request = async (path, options = {}) => {
 
   if (!response.ok) {
     // Plain-text errors are strings; validation errors come back as a JSON object.
-    const message = typeof data === "string" ? data : data?.title || data?.message;
+    const message =
+      typeof data === "string" ? data : data?.title || data?.message;
     throw new Error(message || `Request failed: ${response.status}`);
   }
-
 
   return data;
 };
@@ -74,6 +75,10 @@ export const api = {
    */
   async getUserByEmail(email) {
     return request(`/api/user/${encodeURIComponent(email)}`);
+  },
+
+  async getRuleBySlug(slug) {
+    return request(`/api/rule/${slug}`);
   },
 
   // sends register info to server
@@ -94,7 +99,7 @@ export const api = {
     });
   },
 
-  async getCampaigns(){
+  async getCampaigns() {
     return request(`/api/campaign/all`);
   },
 
@@ -102,7 +107,7 @@ export const api = {
   async createCampaign(name, description, setting) {
     return request(`/api/campaign/create`, {
       method: "POST",
-      body: JSON.stringify({name, description, setting})
+      body: JSON.stringify({ name, description, setting }),
     });
   },
 };
