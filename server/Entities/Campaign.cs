@@ -27,6 +27,8 @@ namespace Nat20Server.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
+        public ActiveSession? ActiveSession { get; set; } = null;
+
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public CampaignSetting Setting { get; set; } = CampaignSetting.Unspecified;

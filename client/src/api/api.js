@@ -110,4 +110,10 @@ export const api = {
       body: JSON.stringify({ name, description, setting }),
     });
   },
+
+  async getPartyRoster(campaignId) {
+    return request(
+      `/api/campaign/${encodeURIComponent(campaignId)}/active-session/roster`,
+    );
+  },
 };

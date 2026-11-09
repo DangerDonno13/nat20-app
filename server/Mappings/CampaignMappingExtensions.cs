@@ -9,6 +9,7 @@ namespace Nat20Server.Mappings
         {
             return new CampaignDto
             {
+                Id = campaign.Id,
                 Name = campaign.Name,
                 Description = campaign.Description,
                 Setting = campaign.Setting,

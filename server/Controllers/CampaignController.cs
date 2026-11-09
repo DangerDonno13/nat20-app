@@ -78,7 +78,7 @@ namespace Nat20Server.Controllers
         }
 
         [HttpPost("share")]
-        public async Task<IActionResult> ShareCampaign(string campaignId,[FromBody] string userEmail)
+        public async Task<IActionResult> ShareCampaign(string campaignId, [FromBody] string userEmail)
         {
             var userId = User.GetUserId();
             if (userId == null)
@@ -101,6 +101,52 @@ namespace Nat20Server.Controllers
             await _campaignService.ShareCampaign(campaign, targetUser.Id);
 
             return Ok();
+        }
+
+        [HttpGet("{campaignId}/active-session/roster")]
+        public async Task<IActionResult> GetPartyRoster(string campaignId)
+        {
+            var userId = User.GetUserId();
+
+            if (userId is null)
+            {
+                return Unauthorized();
+            }
+
+            if (!MongoDB.Bson.ObjectId.TryParse(campaignId, out _))
+            {
+                return BadRequest("Invalid campaign ID.");
+            }
+
+            var campaign = await _campaignService.GetCampaignByIdAsync(campaignId);
+
+            if (campaign is null ||
+                (campaign.OwnerId != userId &&
+                 !campaign.PlayerIds.Contains(userId)))
+            {
+                return NotFound();
+            }
+
+            var session = campaign.ActiveSession;
+
+            if (session is null)
+            {
+                return Ok(new PartyRosterDto(null, []));
+            }
+
+            var members = session.Members
+                .Where(member => member.IsAllied && member.IsParticipating)
+                .OrderBy(member => member.Name, StringComparer.OrdinalIgnoreCase)
+                .Select(member => new PartyMemberDto(
+                    member.Id,
+                    member.Name,
+                    member.CharacterClass,
+                    member.Level))
+                .ToArray();
+
+            return Ok(new PartyRosterDto(
+                new SessionSummaryDto(session.Id, session.Name),
+                members));
         }
     }
 }

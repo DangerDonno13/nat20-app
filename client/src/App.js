@@ -5,6 +5,7 @@ import Login from "./components/Login.js";
 import Register from "./components/Register.js";
 import DiceRoller from "./components/DiceRoller.js";
 import Campaign from "./components/Campaign.js";
+import PartyRoster from "./components/PartyRoster.js";
 import Rules from "./components/Rules.js";
 
 // main app functon for the routes
@@ -18,6 +19,7 @@ function App() {
           <Route path="register" element={<Register />} />
           <Route path="dice" element={<DiceRoller />} />
           <Route path="campaign" element={<Campaign />} />
+          <Route path="campaign/:campaignId/roster" element={<PartyRoster />} />
           <Route path="rules" element={<Rules />} />
         </Route>
       </Routes>
