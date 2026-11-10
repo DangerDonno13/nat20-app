@@ -14,10 +14,12 @@ namespace Nat20Server.Controllers
     [Route("api/campaign")]
     public class CampaignController : ControllerBase
     {
+        private readonly UserService _userService;
         private readonly CampaignService _campaignService;
 
-        public CampaignController(CampaignService campaignService)
+        public CampaignController(UserService userService, CampaignService campaignService)
         {
+            _userService = userService;
             _campaignService = campaignService;
         }
 
@@ -45,9 +47,24 @@ namespace Nat20Server.Controllers
         }
 
         /// <summary>
+        /// Retrieves all campaigns owned by or shared with the user.
+        /// </summary>
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllCampaignsById()
+        {
+            var userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var campaigns = await _campaignService.GetAllCampaignsByIdAsync(userId);
+            return Ok(campaigns);
+        }
+
+        /// <summary>
         /// Creates a new campaign owned by the authenticated user.
         /// </summary>
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateCampaignAsync([FromBody] CampaignDto campaignDto)
         {
             var userId = User.GetUserId();
@@ -58,6 +75,78 @@ namespace Nat20Server.Controllers
 
             var campaign = await _campaignService.CreateCampaignAsync(campaignDto, userId);
             return CreatedAtAction(nameof(GetCampaignById), new { id = campaign.Id }, campaign);
+        }
+
+        [HttpPost("share")]
+        public async Task<IActionResult> ShareCampaign(string campaignId, [FromBody] string userEmail)
+        {
+            var userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+
+            var campaign = await _campaignService.GetCampaignByIdAsync(campaignId);
+            if (campaign == null || campaign.OwnerId != userId)
+            {
+                return NotFound();
+            }
+
+            var targetUser = await _userService.GetUserByEmailAsync(userEmail);
+            if (targetUser == null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            await _campaignService.ShareCampaign(campaign, targetUser.Id);
+
+            return Ok();
+        }
+
+        [HttpGet("{campaignId}/active-session/roster")]
+        public async Task<IActionResult> GetPartyRoster(string campaignId)
+        {
+            var userId = User.GetUserId();
+
+            if (userId is null)
+            {
+                return Unauthorized();
+            }
+
+            if (!MongoDB.Bson.ObjectId.TryParse(campaignId, out _))
+            {
+                return BadRequest("Invalid campaign ID.");
+            }
+
+            var campaign = await _campaignService.GetCampaignByIdAsync(campaignId);
+
+            if (campaign is null ||
+                (campaign.OwnerId != userId &&
+                 !campaign.PlayerIds.Contains(userId)))
+            {
+                return NotFound();
+            }
+
+            var session = campaign.ActiveSession;
+
+            if (session is null)
+            {
+                return Ok(new PartyRosterDto(null, []));
+            }
+
+            var members = session.Members
+                .Where(member => member.IsAllied && member.IsParticipating)
+                .OrderBy(member => member.Name, StringComparer.OrdinalIgnoreCase)
+                .Select(member => new PartyMemberDto(
+                    member.Id,
+                    member.Name,
+                    member.CharacterClass,
+                    member.Level))
+                .ToArray();
+
+            return Ok(new PartyRosterDto(
+                new SessionSummaryDto(session.Id, session.Name),
+                members));
         }
     }
 }
