@@ -38,6 +38,15 @@ export default function Navbar() {
         </li>
         <li>
           <NavLink 
+            to="/campaigns" 
+            className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}
+          >
+            Campaigns
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink 
             to="/dice" 
             className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}
           >

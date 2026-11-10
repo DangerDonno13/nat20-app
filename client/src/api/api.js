@@ -93,4 +93,19 @@ export const api = {
       body: JSON.stringify({ email, password }),
     });
   },
+
+// fetch chars for campaign
+  async getCampaignCharacters(campaignId) {
+    return request(`/api/campaigns/${campaignId}/characters`);
+  },
+
+
+  // link char to campaign
+  async linkCharacterToCampaign(campaignId, characterId) {
+    return request(`/api/campaigns/${campaignId}/characters/${characterId}`, {
+      method: "POST"
+    });
+  }
+
+
 };

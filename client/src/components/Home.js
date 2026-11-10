@@ -34,6 +34,9 @@ function Home() {
           <button onClick={handleLogout} style={{ padding: '8px 16px', cursor: 'pointer' }}>
             Log Out
           </button>
+          <div style={{ marginTop: '15px' }}>
+  <Link to="/campaigns" style={{ fontSize: '18px', fontWeight: 'bold' }}>Go to Campaign Dashboard</Link>
+</div>
         </div>
       ) : (
         <div>
