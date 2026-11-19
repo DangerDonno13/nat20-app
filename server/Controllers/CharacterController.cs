@@ -36,7 +36,7 @@ namespace Nat20Server.Controllers
             return Ok(character);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateCharacter([FromBody] CharacterDto characterDto)
         {
             var userId = User.GetUserId();
