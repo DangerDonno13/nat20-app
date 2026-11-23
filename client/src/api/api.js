@@ -111,6 +111,13 @@ export const api = {
     });
   },
 
+  async shareCampaign(campaignId, email) {
+    return request(`/api/campaign/share?campaignId=${encodeURIComponent(campaignId)}`, {
+      method: "POST",
+      body: JSON.stringify(email.trim()),
+    });
+  },
+
   async getPartyRoster(campaignId) {
     return request(
       `/api/campaign/${encodeURIComponent(campaignId)}/active-session/roster`,

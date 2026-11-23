@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { api } from '../api/api.js';
 import CampaignCard from './CampaignCard.js';
 
@@ -18,10 +18,23 @@ function Campaign() {
   const [formError, setFormError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  const shareDialogRef = useRef(null);
+  const [campaignToShare, setCampaignToShare] = useState(null);
+  const [shareEmail, setShareEmail] = useState('');
+  const [shareError, setShareError] = useState('');
+  const [sharing, setSharing] = useState(false);
+  const [shareMessage, setShareMessage] = useState('');
+
   // Fetch campaigns on mount
   useEffect(() => {
     loadCampaigns();
   }, []);
+
+  useEffect(() => {
+    if (campaignToShare && !loading) {
+      shareDialogRef.current.showModal();
+    }
+  }, [campaignToShare, loading]);
 
   const loadCampaigns = async () => {
     setLoading(true);
@@ -62,6 +75,37 @@ function Campaign() {
     }
   };
 
+  const openShareDialog = (campaign) => {
+    setShareMessage('');
+    setCampaignToShare(campaign);
+  };
+
+  const closeShareDialog = () => {
+    shareDialogRef.current?.close();
+    setCampaignToShare(null);
+    setShareEmail('');
+    setShareError('');
+  };
+
+  const handleShare = async (event) => {
+    event.preventDefault();
+    if (sharing) return;
+
+    const email = shareEmail.trim();
+    setShareError('');
+    setSharing(true);
+
+    try {
+      await api.shareCampaign(campaignToShare.id, email);
+      closeShareDialog();
+      setShareMessage(`Campaign shared with ${email}.`);
+    } catch (err) {
+      setShareError(err.message || 'Could not share campaign.');
+    } finally {
+      setSharing(false);
+    }
+  };
+
   if (loading) {
     return <div style={{ textAlign: 'center', padding: '50px', color: '#666' }}>Loading campaigns...</div>;
   }
@@ -93,6 +137,9 @@ function Campaign() {
       </div>
 
       {error && <p style={{ color: '#e74c3c', marginBottom: '20px' }}>{error}</p>}
+      <div role="status">
+        {shareMessage && <p>{shareMessage}</p>}
+      </div>
 
       {/* OWNED CAMPAIGNS SECTION */}
       <section style={{ marginBottom: '40px' }}>
@@ -103,7 +150,8 @@ function Campaign() {
           {ownedCampaigns.map((camp, index) => (
             <CampaignCard 
               key={camp.id || camp._id || `owned-${index}`} 
-              campaign={camp} 
+              campaign={camp}
+              onShare={openShareDialog}
             />
           ))}
 
@@ -145,6 +193,59 @@ function Campaign() {
           </div>
         </section>
       )}
+
+      <dialog
+        ref={shareDialogRef}
+        aria-labelledby="share-campaign-title"
+        onCancel={(event) => {
+          event.preventDefault();
+          if (!sharing) closeShareDialog();
+        }}
+        style={shareDialogStyle}
+      >
+        {campaignToShare && (
+          <>
+            <h3 id="share-campaign-title" style={{ marginTop: 0, color: 'var(--accent-gold)' }}>
+              Share {campaignToShare.name}
+            </h3>
+
+            {shareError && <p role="alert" style={{ color: '#e74c3c' }}>{shareError}</p>}
+
+            <form onSubmit={handleShare}>
+              <label htmlFor="share-email" style={{ display: 'block', marginBottom: '5px' }}>
+                Recipient email
+              </label>
+              <input
+                id="share-email"
+                type="email"
+                value={shareEmail}
+                onChange={(event) => setShareEmail(event.target.value)}
+                required
+                disabled={sharing}
+                style={inputStyle}
+              />
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '20px' }}>
+                <button
+                  type="button"
+                  onClick={closeShareDialog}
+                  disabled={sharing}
+                  style={{ padding: '8px 16px', border: '1px solid #5a1e1e', background: 'transparent', color: 'var(--text-main)', borderRadius: '4px' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={sharing}
+                  style={{ padding: '8px 20px', background: 'var(--accent-gold)', color: 'var(--accent-black)', border: 'none', borderRadius: '4px', fontWeight: 'bold' }}
+                >
+                  {sharing ? 'Sharing…' : 'Share Campaign'}
+                </button>
+              </div>
+            </form>
+          </>
+        )}
+      </dialog>
 
       {/* CREATE CAMPAIGN MODAL */}
       {isModalOpen && (
@@ -251,6 +352,16 @@ const modalOverlayStyle = {
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 1000,
+};
+
+const shareDialogStyle = {
+  backgroundColor: 'var(--bg-card)',
+  border: 'var(--border-thick)',
+  borderRadius: '8px',
+  color: 'var(--text-main)',
+  padding: '30px',
+  width: 'min(450px, calc(100% - 32px))',
+  boxShadow: '0 8px 24px rgba(0,0,0,0.8)',
 };
 
 const inputStyle = {

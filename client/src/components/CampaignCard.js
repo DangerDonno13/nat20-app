@@ -12,7 +12,7 @@ const SETTING_IMAGES = {
     "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80",
 };
 
-export default function CampaignCard({ campaign }) {
+export default function CampaignCard({ campaign, onShare }) {
   const imageUrl =
     SETTING_IMAGES[campaign.setting] || SETTING_IMAGES.Unspecified;
 
@@ -92,22 +92,50 @@ export default function CampaignCard({ campaign }) {
           {campaign.description || "No description provided."}
         </p>
         {campaign.id && (
-          <Link
-            to={`/campaign/${campaign.id}/roster`}
-            aria-label={`View party for ${campaign.name}`}
+          <div
             style={{
-              display: "inline-block",
+              display: "flex",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "8px",
               marginTop: "16px",
-              padding: "8px 16px",
-              borderRadius: "4px",
-              backgroundColor: "var(--accent-gold)",
-              color: "var(--accent-black)",
-              fontWeight: "bold",
-              textDecoration: "none",
             }}
           >
-            View Party
-          </Link>
+            <Link
+              to={`/campaign/${campaign.id}/roster`}
+              aria-label={`View party for ${campaign.name}`}
+              style={{
+                display: "inline-block",
+                padding: "8px 16px",
+                borderRadius: "4px",
+                backgroundColor: "var(--accent-gold)",
+                color: "var(--accent-black)",
+                fontWeight: "bold",
+                textDecoration: "none",
+              }}
+            >
+              View Party
+            </Link>
+            {onShare && (
+              <button
+                type="button"
+                onClick={() => onShare(campaign)}
+                aria-label={`Share ${campaign.name}`}
+                style={{
+                  padding: "8px 16px",
+                  border: "1px solid var(--accent-gold)",
+                  borderRadius: "4px",
+                  backgroundColor: "transparent",
+                  color: "var(--accent-gold)",
+                  fontFamily: "inherit",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+              >
+                Share
+              </button>
+            )}
+          </div>
         )}
       </div>
     </div>
