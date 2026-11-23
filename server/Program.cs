@@ -77,6 +77,8 @@ builder.Services.AddSingleton<RuleService>();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CampaignService>();
+builder.Services.AddScoped<CharacterService>();
+builder.Services.AddScoped<PartyService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {

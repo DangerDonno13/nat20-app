@@ -8,6 +8,7 @@ namespace Nat20Server.Entities
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
+        public string OwnerId { get; set; } = null!;
 
 
         // Character info

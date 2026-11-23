@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nat20Server.Auth;
 using Nat20Server.DTOs;
 using Nat20Server.Entities;
+using Nat20Server.Mappings;
 using Nat20Server.Services;
 
 namespace Nat20Server.Controllers
@@ -33,7 +34,7 @@ namespace Nat20Server.Controllers
             {
                 return NotFound();
             }
-            return Ok(character);
+            return Ok(character.ToDto());
         }
 
         [HttpPost("create")]
@@ -44,9 +45,10 @@ namespace Nat20Server.Controllers
             {
                 return Unauthorized();
             }
+            characterDto.OwnerId = userId;
 
             var character = await _characterService.CreateCharacterAsync(characterDto);
-            return CreatedAtAction(nameof(GetCharacterById), new { id = character.Id }, character);
+            return CreatedAtAction(nameof(GetCharacterById), new { id = character.Id }, character.ToDto());
         }
     }
 }

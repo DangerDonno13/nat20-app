@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Nat20Server.Auth;
 using Nat20Server.DTOs;
+using Nat20Server.Mappings;
 using Nat20Server.Services;
 
 namespace Nat20Server.Controllers
@@ -43,7 +44,7 @@ namespace Nat20Server.Controllers
             {
                 return NotFound();
             }
-            return Ok(campaign);
+            return Ok(campaign.ToDto());
         }
 
         /// <summary>
@@ -74,7 +75,7 @@ namespace Nat20Server.Controllers
             }
 
             var campaign = await _campaignService.CreateCampaignAsync(campaignDto, userId);
-            return CreatedAtAction(nameof(GetCampaignById), new { id = campaign.Id }, campaign);
+            return CreatedAtAction(nameof(GetCampaignById), new { id = campaign.Id }, campaign.ToDto());
         }
 
         [HttpPost("share")]

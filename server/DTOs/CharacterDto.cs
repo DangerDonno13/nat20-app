@@ -3,6 +3,7 @@
     public class CharacterDto
     {
         public string? Id { get; set; }
+        public string OwnerId { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string? Race { get; set; }
         public string? Class { get; set; }
