@@ -66,5 +66,15 @@ namespace Nat20Server.Services
             var update = Builders<Campaign>.Update.Set(c => c.PlayerIds, campaign.PlayerIds);
             await _campaignsCollection.UpdateOneAsync(c => c.Id == campaign.Id, update);
         }
+
+        public async Task AddCharacterToCampaignAsync(string campaignId, string characterId)
+        {
+            var update = Builders<Campaign>.Update.AddToSet(c => c.CharacterIds, characterId);
+            await _campaignsCollection.UpdateOneAsync(c => c.Id == campaignId, update);
+        }
+
     }
+
+
+
 }

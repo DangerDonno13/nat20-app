@@ -9,7 +9,7 @@ namespace Nat20Server.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/campaign")]
+    [Route("api/character")]
     public class CharacterController : ControllerBase
     {
         private readonly CharacterService _characterService;
@@ -40,12 +40,13 @@ namespace Nat20Server.Controllers
         public async Task<IActionResult> CreateCharacter([FromBody] CharacterDto characterDto)
         {
             var userId = User.GetUserId();
+            
             if (userId == null)
             {
                 return Unauthorized();
             }
 
-            var character = await _characterService.CreateCharacterAsync(characterDto);
+           var character = await _characterService.CreateCharacterAsync(characterDto, userId);
             return CreatedAtAction(nameof(GetCharacterById), new { id = character.Id }, character);
         }
     }

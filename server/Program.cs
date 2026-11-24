@@ -78,6 +78,8 @@ builder.Services.AddSingleton<RuleService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<CampaignService>();
 
+builder.Services.AddScoped<CharacterService>();
+
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());

@@ -39,6 +39,9 @@ namespace Nat20Server.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public List<string> PlayerIds { get; set; } = new List<string>();
 
+[BsonRepresentation(BsonType.ObjectId)]
+        public List<string> CharacterIds { get; set; } = new List<string>();
+
         [BsonRepresentation(BsonType.String)]
         public CampaignStatus Status { get; set; } = CampaignStatus.Unspecified;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
