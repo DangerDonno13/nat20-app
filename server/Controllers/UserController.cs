@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nat20Server.Auth;
-using Nat20Server.Services;
-using Nat20Server.Entities;
-using Nat20Server.DTOs;
-using Nat20Server.Mappings;
 using Nat20Server.DTOs.User;
+using Nat20Server.DTOs.Users;
+using Nat20Server.Entities;
+using Nat20Server.Mappings;
+using Nat20Server.Services;
 
 namespace Nat20Server.Controllers
 {

@@ -1,9 +1,10 @@
-﻿namespace Nat20Server.DTOs.Character
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Nat20Server.DTOs.Character
 {
-    public class CharacterResponse
+    public class CreateCharacterRequest
     {
-        public string? Id { get; set; }
-        public string OwnerId { get; set; } = null!;
+        [Required, StringLength(100)]
         public string Name { get; set; } = null!;
         public string? Race { get; set; }
         public string? Class { get; set; }

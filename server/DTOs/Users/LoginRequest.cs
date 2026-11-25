@@ -1,4 +1,4 @@
-﻿namespace Nat20Server.DTOs.User
+﻿namespace Nat20Server.DTOs.Users
 {
     // This DTO is used for login requests. It contains the necessary information for a user to authenticate.
     public class LoginRequest

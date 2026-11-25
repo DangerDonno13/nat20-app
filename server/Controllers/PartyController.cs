@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nat20Server.Auth;
+using Nat20Server.DTOs.Parties;
 using Nat20Server.DTOs.Party;
 using Nat20Server.Services;
 

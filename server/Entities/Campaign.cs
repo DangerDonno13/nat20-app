@@ -29,6 +29,7 @@ namespace Nat20Server.Entities
 
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
+        [BsonRepresentation(BsonType.String)]
         public CampaignSetting Setting { get; set; } = CampaignSetting.Unspecified;
 
         [BsonRepresentation(BsonType.ObjectId)]
@@ -39,6 +40,7 @@ namespace Nat20Server.Entities
 
         [BsonRepresentation(BsonType.String)]
         public CampaignStatus Status { get; set; } = CampaignStatus.Unspecified;
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

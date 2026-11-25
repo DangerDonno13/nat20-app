@@ -40,7 +40,7 @@ namespace Nat20Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCharacter([FromBody] CreateCharacterRequest req)
+        public async Task<IActionResult> CreateCharacter([FromBody] CreateCharacterRequest request)
         {
             var userId = User.GetUserId();
             if (userId == null)
@@ -48,7 +48,7 @@ namespace Nat20Server.Controllers
                 return Unauthorized();
             }
 
-            var character = await _characterService.CreateCharacterAsync(req, userId);
+            var character = await _characterService.CreateCharacterAsync(request, userId);
             return CreatedAtAction(nameof(GetCharacterById), new { id = character.Id }, character);
         }
     }

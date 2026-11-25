@@ -1,8 +1,8 @@
-﻿using System.Text;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Nat20Server.Entities;
+using System.Text;
 
 namespace Nat20Server.Auth
 {
@@ -40,10 +40,7 @@ namespace Nat20Server.Auth
                 [JwtRegisteredClaimNames.Jti] = Guid.NewGuid().ToString()
             };
 
-            if (!string.IsNullOrEmpty(user.Username))
-            {
-                claims["username"] = user.Username;
-            }
+            claims["username"] = user.Username;
 
             var descriptor = new SecurityTokenDescriptor
             {

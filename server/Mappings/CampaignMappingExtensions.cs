@@ -1,11 +1,11 @@
-﻿using Nat20Server.DTOs.Campaign;
+﻿using Nat20Server.DTOs.Campaigns;
 using Nat20Server.Entities;
 
 namespace Nat20Server.Mappings
 {
     public static class CampaignMappingExtensions
     {
-        public static CampaignResponse ToResDto(this Campaign campaign)
+        public static CampaignResponse ToResponse(this Campaign campaign)
         {
             return new CampaignResponse
             {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nat20Server.Auth;
-using Nat20Server.DTOs.Campaign;
+using Nat20Server.DTOs.Campaigns;
 using Nat20Server.Services;
 
 namespace Nat20Server.Controllers
@@ -67,7 +67,7 @@ namespace Nat20Server.Controllers
         /// Creates a new campaign owned by the authenticated user.
         /// </summary>
         [HttpPost]
-        public async Task<IActionResult> CreateCampaignAsync([FromBody] CreateCampaignRequest campaignDto)
+        public async Task<IActionResult> CreateCampaign([FromBody] CreateCampaignRequest request)
         {
             var userId = User.GetUserId();
             if (userId == null)
@@ -75,12 +75,12 @@ namespace Nat20Server.Controllers
                 return Unauthorized();
             }
 
-            var campaign = await _campaignService.CreateCampaignAsync(campaignDto, userId);
+            var campaign = await _campaignService.CreateCampaignAsync(request, userId);
             return CreatedAtAction(nameof(GetCampaignById), new { id = campaign.Id }, campaign);
         }
 
         [HttpPost("{campaignId}/share")]
-        public async Task<IActionResult> ShareCampaign(string campaignId, [FromBody] string userEmail)
+        public async Task<IActionResult> ShareCampaign(string campaignId, [FromBody] ShareCampaignRequest request)
         {
             var userId = User.GetUserId();
             if (userId == null)
@@ -98,7 +98,7 @@ namespace Nat20Server.Controllers
                 return Forbid();
             }
 
-            var targetUser = await _userService.GetUserByEmailAsync(userEmail);
+            var targetUser = await _userService.GetUserByEmailAsync(request.Email);
             if (targetUser == null)
             {
                 return BadRequest("User not found.");
@@ -106,7 +106,7 @@ namespace Nat20Server.Controllers
 
             await _campaignService.ShareCampaign(campaignId, targetUser.Id);
 
-            return Ok();
+            return NoContent();
         }
     }
 }

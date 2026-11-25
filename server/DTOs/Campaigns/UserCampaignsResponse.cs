@@ -1,4 +1,4 @@
-﻿namespace Nat20Server.DTOs.Campaign
+﻿namespace Nat20Server.DTOs.Campaigns
 {
     public class UserCampaignsResponse
     {

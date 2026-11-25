@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using Nat20Server.DTOs.Campaign;
+using Nat20Server.DTOs.Campaigns;
 using Nat20Server.Entities;
 using Nat20Server.Mappings;
 
@@ -24,7 +24,7 @@ namespace Nat20Server.Services
         public async Task<CampaignResponse?> GetCampaignByIdAsync(string id)
         {
             var campaign = await _campaignsCollection.Find(campaign => campaign.Id == id).FirstOrDefaultAsync();
-            return campaign?.ToResDto();
+            return campaign?.ToResponse();
         }
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace Nat20Server.Services
 
             return new UserCampaignsResponse
             {
-                OwnedCampaigns = campaigns.Where(c => c.OwnerId == userId).Select(c => c.ToResDto()).ToList(),
-                SharedCampaigns = campaigns.Where(c => c.PlayerIds.Contains(userId)).Select(c => c.ToResDto()).ToList()
+                OwnedCampaigns = campaigns.Where(c => c.OwnerId == userId).Select(c => c.ToResponse()).ToList(),
+                SharedCampaigns = campaigns.Where(c => c.PlayerIds.Contains(userId)).Select(c => c.ToResponse()).ToList()
             };
         }
 
@@ -48,30 +48,24 @@ namespace Nat20Server.Services
         /// </summary>
         /// <param name="campaign">The campaign to create.</param>
         /// <param name="ownerId">The ID of the user who owns the campaign.</param>
-        public async Task<CampaignResponse> CreateCampaignAsync(CreateCampaignRequest campaign, string ownerId)
+        public async Task<CampaignResponse> CreateCampaignAsync(CreateCampaignRequest request, string ownerId)
         {
             var campaignEntity = new Campaign
             {
-                Name = campaign.Name,
-                Description = campaign.Description,
-                Setting = campaign.Setting,
+                Name = request.Name,
+                Description = request.Description,
+                Setting = request.Setting,
                 OwnerId = ownerId,
-                Status = campaign.Status
+                Status = request.Status
             };
             await _campaignsCollection.InsertOneAsync(campaignEntity);
-            return campaignEntity.ToResDto();
+            return campaignEntity.ToResponse();
         }
 
         public async Task ShareCampaign(string campaignId, string userId)
         {
-            var campaign = await _campaignsCollection.Find(c => c.Id == campaignId).FirstOrDefaultAsync();
-            if (campaign == null)
-            {
-                throw new ArgumentException("Campaign not found.");
-            }
-
             var update = Builders<Campaign>.Update.AddToSet(c => c.PlayerIds, userId);
-            await _campaignsCollection.UpdateOneAsync(c => c.Id == campaign.Id, update);
+            await _campaignsCollection.UpdateOneAsync(c => c.Id == campaignId, update);
         }
     }
 }

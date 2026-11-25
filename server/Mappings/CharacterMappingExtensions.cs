@@ -1,11 +1,11 @@
-﻿using Nat20Server.DTOs.Character;
+﻿using Nat20Server.DTOs.Characters;
 using Nat20Server.Entities;
 
 namespace Nat20Server.Mappings
 {
     public static class CharacterMappingExtensions
     {
-        public static CharacterResponse ToResDto(this Character character)
+        public static CharacterResponse ToResponse(this Character character)
         {
             return new CharacterResponse
             {

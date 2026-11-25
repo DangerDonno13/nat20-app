@@ -1,6 +1,5 @@
-﻿using Nat20Server.DTOs;
+﻿using MongoDB.Driver;
 using Nat20Server.Entities;
-using MongoDB.Driver;
 
 namespace Nat20Server.Services
 {

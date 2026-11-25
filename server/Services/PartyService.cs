@@ -8,7 +8,7 @@ namespace Nat20Server.Services
     public class PartyService
     {
         private readonly IMongoCollection<Party> _partiesCollection;
-        
+
         public PartyService(IMongoDatabase database)
         {
             _partiesCollection = database.GetCollection<Party>("Parties");
@@ -17,7 +17,7 @@ namespace Nat20Server.Services
         public async Task<PartyResponse?> GetPartyByIdAsync(string id)
         {
             var party = await _partiesCollection.Find(party => party.Id == id).FirstOrDefaultAsync();
-            return party?.ToResDto();
+            return party?.ToResponse();
         }
 
         public async Task<PartyResponse> CreatePartyAsync(CreatePartyRequest request)
@@ -29,7 +29,7 @@ namespace Nat20Server.Services
             };
 
             await _partiesCollection.InsertOneAsync(partyEntity);
-            return partyEntity.ToResDto();
+            return partyEntity.ToResponse();
         }
 
         public async Task<PartyResponse?> AddCharacterAsync(string partyId, string characterId)
@@ -43,7 +43,7 @@ namespace Nat20Server.Services
             };
 
             var updatedParty = await _partiesCollection.FindOneAndUpdateAsync(filter, update, options);
-            return updatedParty?.ToResDto();
+            return updatedParty?.ToResponse();
         }
     }
 }

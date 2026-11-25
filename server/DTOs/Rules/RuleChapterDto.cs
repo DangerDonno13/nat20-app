@@ -1,4 +1,4 @@
-﻿namespace Nat20Server.DTOs
+﻿namespace Nat20Server.DTOs.Rules
 {
     /// <summary>
     /// A chapter from the rules for Dungeons and Dragons DTO.

@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -7,6 +6,7 @@ using MongoDB.Driver;
 using Nat20Server.Auth;
 using Nat20Server.Database;
 using Nat20Server.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 

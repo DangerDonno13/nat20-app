@@ -1,8 +1,4 @@
-﻿#region Usings
-using System.Collections.Generic;
-
-using Nat20Server.DTOs;
-#endregion
+﻿using Nat20Server.DTOs.Rules;
 
 namespace Nat20Server.Services
 {

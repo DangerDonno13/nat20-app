@@ -1,7 +1,9 @@
-﻿namespace Nat20Server.DTOs.Character
+﻿namespace Nat20Server.DTOs.Characters
 {
-    public class CreateCharacterRequest
+    public class CharacterResponse
     {
+        public string? Id { get; set; }
+        public string OwnerId { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string? Race { get; set; }
         public string? Class { get; set; }
