@@ -112,9 +112,9 @@ export const api = {
   },
 
   async shareCampaign(campaignId, email) {
-    return request(`/api/campaign/share?campaignId=${encodeURIComponent(campaignId)}`, {
+    return request(`/api/campaign/${encodeURIComponent(campaignId)}/share`, {
       method: "POST",
-      body: JSON.stringify(email.trim()),
+      body: JSON.stringify({ "email" : email }),
     });
   },
 
