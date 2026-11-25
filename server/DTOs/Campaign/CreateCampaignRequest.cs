@@ -1,12 +1,10 @@
 ﻿using Nat20Server.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace Nat20Server.DTOs
+namespace Nat20Server.DTOs.Campaign
 {
-    public class CampaignDto
+    public class CreateCampaignRequest
     {
-        public string? Id { get; set; }
-
         [Required]
         public string Name { get; set; } = null!;
         public string Description { get; set; } = string.Empty;

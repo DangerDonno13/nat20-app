@@ -1,6 +1,6 @@
-﻿namespace Nat20Server.DTOs
+﻿namespace Nat20Server.DTOs.Character
 {
-    public class CharacterDto
+    public class CharacterResponse
     {
         public string? Id { get; set; }
         public string OwnerId { get; set; } = null!;

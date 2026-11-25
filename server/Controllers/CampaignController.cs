@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nat20Server.Auth;
-using Nat20Server.DTOs;
-using Nat20Server.Mappings;
+using Nat20Server.DTOs.Campaign;
 using Nat20Server.Services;
 
 namespace Nat20Server.Controllers
@@ -38,35 +37,37 @@ namespace Nat20Server.Controllers
 
             var campaign = await _campaignService.GetCampaignByIdAsync(id);
 
-            // Return 404 (not 403) for campaigns the caller can't access, so ids can't be probed.
-            if (campaign == null
-                || (campaign.OwnerId != userId && !campaign.PlayerIds.Contains(userId)))
+            if (campaign == null)
             {
                 return NotFound();
             }
-            return Ok(campaign.ToDto());
+            if (campaign.OwnerId != userId && !campaign.PlayerIds.Contains(userId))
+            {
+                return Forbid();
+            }
+            return Ok(campaign);
         }
 
         /// <summary>
         /// Retrieves all campaigns owned by or shared with the user.
         /// </summary>
         [HttpGet("all")]
-        public async Task<IActionResult> GetAllCampaignsById()
+        public async Task<IActionResult> GetCampaignsForUser()
         {
             var userId = User.GetUserId();
             if (userId == null)
             {
                 return Unauthorized();
             }
-            var campaigns = await _campaignService.GetAllCampaignsByIdAsync(userId);
+            var campaigns = await _campaignService.GetCampaignsForUserAsync(userId);
             return Ok(campaigns);
         }
 
         /// <summary>
         /// Creates a new campaign owned by the authenticated user.
         /// </summary>
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateCampaignAsync([FromBody] CampaignDto campaignDto)
+        [HttpPost]
+        public async Task<IActionResult> CreateCampaignAsync([FromBody] CreateCampaignRequest campaignDto)
         {
             var userId = User.GetUserId();
             if (userId == null)
@@ -75,10 +76,10 @@ namespace Nat20Server.Controllers
             }
 
             var campaign = await _campaignService.CreateCampaignAsync(campaignDto, userId);
-            return CreatedAtAction(nameof(GetCampaignById), new { id = campaign.Id }, campaign.ToDto());
+            return CreatedAtAction(nameof(GetCampaignById), new { id = campaign.Id }, campaign);
         }
 
-        [HttpPost("share")]
+        [HttpPost("{campaignId}/share")]
         public async Task<IActionResult> ShareCampaign(string campaignId, [FromBody] string userEmail)
         {
             var userId = User.GetUserId();
@@ -88,9 +89,13 @@ namespace Nat20Server.Controllers
             }
 
             var campaign = await _campaignService.GetCampaignByIdAsync(campaignId);
-            if (campaign == null || campaign.OwnerId != userId)
+            if (campaign == null)
             {
                 return NotFound();
+            }
+            if (campaign.OwnerId != userId)
+            {
+                return Forbid();
             }
 
             var targetUser = await _userService.GetUserByEmailAsync(userEmail);
@@ -99,55 +104,9 @@ namespace Nat20Server.Controllers
                 return BadRequest("User not found.");
             }
 
-            await _campaignService.ShareCampaign(campaign, targetUser.Id);
+            await _campaignService.ShareCampaign(campaignId, targetUser.Id);
 
             return Ok();
-        }
-
-        [HttpGet("{campaignId}/active-session/roster")]
-        public async Task<IActionResult> GetPartyRoster(string campaignId)
-        {
-            var userId = User.GetUserId();
-
-            if (userId is null)
-            {
-                return Unauthorized();
-            }
-
-            if (!MongoDB.Bson.ObjectId.TryParse(campaignId, out _))
-            {
-                return BadRequest("Invalid campaign ID.");
-            }
-
-            var campaign = await _campaignService.GetCampaignByIdAsync(campaignId);
-
-            if (campaign is null ||
-                (campaign.OwnerId != userId &&
-                 !campaign.PlayerIds.Contains(userId)))
-            {
-                return NotFound();
-            }
-
-            var session = campaign.ActiveSession;
-
-            if (session is null)
-            {
-                return Ok(new PartyRosterDto(null, []));
-            }
-
-            var members = session.Members
-                .Where(member => member.IsAllied && member.IsParticipating)
-                .OrderBy(member => member.Name, StringComparer.OrdinalIgnoreCase)
-                .Select(member => new PartyMemberDto(
-                    member.Id,
-                    member.Name,
-                    member.CharacterClass,
-                    member.Level))
-                .ToArray();
-
-            return Ok(new PartyRosterDto(
-                new SessionSummaryDto(session.Id, session.Name),
-                members));
         }
     }
 }

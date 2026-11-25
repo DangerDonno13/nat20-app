@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
-using Nat20Server.DTOs;
+using Nat20Server.DTOs.Character;
 using Nat20Server.Entities;
+using Nat20Server.Mappings;
 
 namespace Nat20Server.Services
 {
@@ -13,25 +14,27 @@ namespace Nat20Server.Services
             _charactersCollection = database.GetCollection<Character>("Characters");
         }
 
-        public async Task<Character?> GetCharacterByIdAsync(string id)
+        public async Task<CharacterResponse?> GetCharacterByIdAsync(string id)
         {
-            return await _charactersCollection.Find(character => character.Id == id).FirstOrDefaultAsync();
+            var character = await _charactersCollection.Find(character => character.Id == id).FirstOrDefaultAsync();
+            return character?.ToResDto();
         }
 
-        public async Task<Character> CreateCharacterAsync(CharacterDto character)
+        public async Task<CharacterResponse> CreateCharacterAsync(CreateCharacterRequest req, string ownerId)
         {
             var characterEntity = new Character
             {
-                Name = character.Name,
-                Race = character.Race,
-                Class = character.Class,
-                Background = character.Background,
-                Inventory = character.Inventory,
-                Spells = character.Spells,
-                Skills = character.Skills
+                OwnerId = ownerId,
+                Name = req.Name,
+                Race = req.Race,
+                Class = req.Class,
+                Background = req.Background,
+                Inventory = req.Inventory ?? [],
+                Spells = req.Spells,
+                Skills = req.Skills
             };
             await _charactersCollection.InsertOneAsync(characterEntity);
-            return characterEntity;
+            return characterEntity.ToResDto();
         }
     }
 }

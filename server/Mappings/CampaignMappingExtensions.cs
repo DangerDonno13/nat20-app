@@ -1,19 +1,22 @@
-﻿using Nat20Server.DTOs;
+﻿using Nat20Server.DTOs.Campaign;
 using Nat20Server.Entities;
 
 namespace Nat20Server.Mappings
 {
     public static class CampaignMappingExtensions
     {
-        public static CampaignDto ToDto(this Campaign campaign)
+        public static CampaignResponse ToResDto(this Campaign campaign)
         {
-            return new CampaignDto
+            return new CampaignResponse
             {
                 Id = campaign.Id,
                 Name = campaign.Name,
                 Description = campaign.Description,
                 Setting = campaign.Setting,
-                Status = campaign.Status
+                Status = campaign.Status,
+                OwnerId = campaign.OwnerId,
+                PlayerIds = campaign.PlayerIds,
+                CreatedAt = campaign.CreatedAt,
             };
         }
     }

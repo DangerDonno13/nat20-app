@@ -1,4 +1,4 @@
-﻿namespace Nat20Server.DTOs
+﻿namespace Nat20Server.DTOs.User
 {
     // This DTO is used for user registration. It includes necessary fields for creating a new user account.
     public class RegisterRequest

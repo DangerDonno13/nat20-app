@@ -1,4 +1,4 @@
-﻿namespace Nat20Server.DTOs
+﻿namespace Nat20Server.DTOs.User
 {
     public class UserPublicDto
     {

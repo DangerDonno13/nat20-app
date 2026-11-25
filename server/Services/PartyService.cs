@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
-using Nat20Server.DTOs;
+using Nat20Server.DTOs.Party;
 using Nat20Server.Entities;
+using Nat20Server.Mappings;
 
 namespace Nat20Server.Services
 {
@@ -13,24 +14,25 @@ namespace Nat20Server.Services
             _partiesCollection = database.GetCollection<Party>("Parties");
         }
 
-        public async Task<Party?> GetPartyByIdAsync(string id)
+        public async Task<PartyResponse?> GetPartyByIdAsync(string id)
         {
-            return await _partiesCollection.Find(party => party.Id == id).FirstOrDefaultAsync();
+            var party = await _partiesCollection.Find(party => party.Id == id).FirstOrDefaultAsync();
+            return party?.ToResDto();
         }
 
-        public async Task<Party> CreatePartyAsync(PartyDto party)
+        public async Task<PartyResponse> CreatePartyAsync(CreatePartyRequest request)
         {
             var partyEntity = new Party
             {
-                Id = party.Id,
-                CharacterIds = party.CharacterIds
+                CampaignId = request.CampaignId,
+                CharacterIds = request.CharacterIds ?? []
             };
 
             await _partiesCollection.InsertOneAsync(partyEntity);
-            return partyEntity;
+            return partyEntity.ToResDto();
         }
 
-        public async Task<Party?> AddCharacterAsync(string partyId, string characterId)
+        public async Task<PartyResponse?> AddCharacterAsync(string partyId, string characterId)
         {
             var filter = Builders<Party>.Filter.Eq(p => p.Id, partyId);
             var update = Builders<Party>.Update.AddToSet(p => p.CharacterIds, characterId);
@@ -40,7 +42,8 @@ namespace Nat20Server.Services
                 ReturnDocument = ReturnDocument.After
             };
 
-            return await _partiesCollection.FindOneAndUpdateAsync(filter, update, options);
+            var updatedParty = await _partiesCollection.FindOneAndUpdateAsync(filter, update, options);
+            return updatedParty?.ToResDto();
         }
     }
 }
