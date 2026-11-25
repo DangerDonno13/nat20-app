@@ -25,7 +25,7 @@ namespace Nat20Server.Services
             var partyEntity = new Party
             {
                 CampaignId = request.CampaignId,
-                CharacterIds = request.CharacterIds ?? []
+                CharacterIds = []
             };
 
             await _partiesCollection.InsertOneAsync(partyEntity);
