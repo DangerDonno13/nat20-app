@@ -1,4 +1,4 @@
-﻿namespace Nat20Server.DTOs.Party
+﻿namespace Nat20Server.DTOs.Parties
 {
     public class PartyResponse
     {

@@ -1,6 +1,4 @@
-﻿using Nat20Server.DTOs.User;
-
-namespace Nat20Server.DTOs.Users
+﻿namespace Nat20Server.DTOs.Users
 {
     public class AuthResponse
     {

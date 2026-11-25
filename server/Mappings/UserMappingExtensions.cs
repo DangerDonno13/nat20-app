@@ -1,5 +1,4 @@
-﻿using Nat20Server.DTOs.User;
-using Nat20Server.Entities;
+﻿using Nat20Server.Entities;
 
 namespace Nat20Server.Mappings
 {

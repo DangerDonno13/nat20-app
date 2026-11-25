@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Nat20Server.Auth;
-using Nat20Server.DTOs.Character;
+using Nat20Server.DTOs.Characters;
 using Nat20Server.Services;
 
 namespace Nat20Server.Controllers
@@ -50,6 +50,27 @@ namespace Nat20Server.Controllers
 
             var character = await _characterService.CreateCharacterAsync(request, userId);
             return CreatedAtAction(nameof(GetCharacterById), new { id = character.Id }, character);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCharacter(string id, [FromBody] UpdateCharacterRequest request)
+        {
+            var userId = User.GetUserId();
+            if (userId == null)
+            {
+                return Unauthorized();
+            }
+            var character = await _characterService.GetCharacterByIdAsync(id);
+            if (character == null)
+            {
+                return NotFound();
+            }
+            if (character.OwnerId != userId)
+            {
+                return Forbid();
+            }
+            await _characterService.UpdateCharacterAsync(id, request);
+            return NoContent();
         }
     }
 }

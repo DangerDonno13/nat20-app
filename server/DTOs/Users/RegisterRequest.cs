@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Nat20Server.DTOs.User
+namespace Nat20Server.DTOs.Users
 {
     // This DTO is used for user registration. It includes necessary fields for creating a new user account.
     public class RegisterRequest

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Nat20Server.DTOs.Character
+namespace Nat20Server.DTOs.Characters
 {
     public class CreateCharacterRequest
     {
