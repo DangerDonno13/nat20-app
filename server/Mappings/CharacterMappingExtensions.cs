@@ -5,6 +5,9 @@ namespace Nat20Server.Mappings
 {
     public static class CharacterMappingExtensions
     {
+        /// <summary>
+        /// Maps a Character to a CharacterResponse DTO.
+        /// </summary>
         public static CharacterResponse ToResponse(this Character character)
         {
             return new CharacterResponse

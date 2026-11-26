@@ -79,6 +79,12 @@ namespace Nat20Server.Controllers
             return CreatedAtAction(nameof(GetCampaignById), new { id = campaign.Id }, campaign);
         }
 
+        /// <summary>
+        /// Shares a campaign with another user by email. Only the owner of the campaign can share it.
+        /// </summary>
+        /// <param name="campaignId">The ID of the campaign to share</param>
+        /// <param name="request">The request containing the email of the user to share the campaign with</param>
+        /// <returns>A success response if the campaign is shared successfully</returns>
         [HttpPost("{campaignId}/share")]
         public async Task<IActionResult> ShareCampaign(string campaignId, [FromBody] ShareCampaignRequest request)
         {

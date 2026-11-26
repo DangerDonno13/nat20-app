@@ -5,6 +5,9 @@ namespace Nat20Server.Mappings
 {
     public static class CampaignMappingExtensions
     {
+        /// <summary>
+        /// Maps a Campaign to a CampaignResponse DTO.
+        /// </summary>
         public static CampaignResponse ToResponse(this Campaign campaign)
         {
             return new CampaignResponse

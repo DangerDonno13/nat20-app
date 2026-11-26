@@ -14,12 +14,23 @@ namespace Nat20Server.Services
             _charactersCollection = database.GetCollection<Character>("Characters");
         }
 
+        /// <summary>
+        /// Gets a character by its ID from the database and returns it as a CharacterResponse object. If the character is not found, it returns null.
+        /// </summary>
+        /// <param name="id">The ID of the character to retrieve.</param>
+        /// <returns>The character if found, otherwise null.</returns>
         public async Task<CharacterResponse?> GetCharacterByIdAsync(string id)
         {
             var character = await _charactersCollection.Find(character => character.Id == id).FirstOrDefaultAsync();
             return character?.ToResponse();
         }
 
+        /// <summary>
+        /// Creates a character in the database based on the provided CreateCharacterRequest and ownerId, and returns the created character as a CharacterResponse object.
+        /// </summary>
+        /// <param name="request">The request containing the character details.</param>
+        /// <param name="ownerId">The ID of the user who owns the character.</param>
+        /// <returns>The created character as a CharacterResponse object.</returns>
         public async Task<CharacterResponse> CreateCharacterAsync(CreateCharacterRequest request, string ownerId)
         {
             var characterEntity = new Character
@@ -37,6 +48,14 @@ namespace Nat20Server.Services
             return characterEntity.ToResponse();
         }
 
+        /// <summary>
+        /// Updates an existing Character with the provided ID based on the UpdateCharacterRequest.
+        /// Only the fields that are not null in the request will be updated. If no fields are provided for update, it returns null.
+        /// Otherwise, it returns the updated character as a CharacterResponse object.
+        /// </summary>
+        /// <param name="id">The ID of the character to update.</param>
+        /// <param name="request">The request containing the updated character details.</param>
+        /// <returns>The updated character as a CharacterResponse object, or null if no updates were made.</returns>
         public async Task<CharacterResponse?> UpdateCharacterAsync(string id, UpdateCharacterRequest request)
         {
             var updateBuilder = Builders<Character>.Update;

@@ -6,6 +6,9 @@ using Nat20Server.Services;
 
 namespace Nat20Server.Controllers
 {
+    /// <summary>
+    /// REST controller for Party management. All endpoints require authentication.
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("api/party")]
@@ -22,6 +25,9 @@ namespace Nat20Server.Controllers
             _campaignService = campaignService;
         }
 
+        /// <summary>
+        /// Retrieves a party by id. Only the owner of the campaign can see it.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPartyById(string id)
         {
@@ -51,6 +57,9 @@ namespace Nat20Server.Controllers
             return Ok(party);
         }
 
+        /// <summary>
+        /// Creates a new party in a campaign. Only the owner of the campaign can create parties.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> CreateParty([FromBody] CreatePartyRequest request)
         {
@@ -74,6 +83,12 @@ namespace Nat20Server.Controllers
             return CreatedAtAction(nameof(GetPartyById), new { id = party.Id }, party);
         }
 
+        /// <summary>
+        /// Adds a character to a party. Only the owner of the campaign can add a character to a party.
+        /// </summary>
+        /// <param name="partyId">The ID of the party to add the character to.</param>
+        /// <param name="request">The character to add.</param>
+        /// <returns>A success response containing the updated party object when successful.</returns>
         [HttpPost("{partyId}/add-character")]
         public async Task<IActionResult> AddCharacter(string partyId, [FromBody] AddCharacterRequest request)
         {

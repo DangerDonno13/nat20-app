@@ -6,6 +6,9 @@ using Nat20Server.Services;
 
 namespace Nat20Server.Controllers
 {
+    /// <summary>
+    /// REST Controller for Character management. All endpoints require authentication.
+    /// </summary>
     [Authorize]
     [ApiController]
     [Route("api/character")]
@@ -18,6 +21,9 @@ namespace Nat20Server.Controllers
             _characterService = characterService;
         }
 
+        /// <summary>
+        /// Retrieves a character by id. Only the owner of the character can see it.
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCharacterById(string id)
         {
@@ -39,6 +45,9 @@ namespace Nat20Server.Controllers
             return Ok(character);
         }
 
+        /// <summary>
+        /// Creates a new character owned by the authenticated user.
+        /// </summary>
         [HttpPost]
         public async Task<IActionResult> CreateCharacter([FromBody] CreateCharacterRequest request)
         {
@@ -52,6 +61,12 @@ namespace Nat20Server.Controllers
             return CreatedAtAction(nameof(GetCharacterById), new { id = character.Id }, character);
         }
 
+        /// <summary>
+        /// Updates a character owned by the authenticated user.
+        /// </summary>
+        /// <param name="id">The ID of the character to update.</param>
+        /// <param name="request">The information to update.</param>
+        /// <returns>A success response if the update was successful.</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCharacter(string id, [FromBody] UpdateCharacterRequest request)
         {

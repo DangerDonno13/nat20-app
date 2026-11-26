@@ -61,7 +61,12 @@ namespace Nat20Server.Services
             await _campaignsCollection.InsertOneAsync(campaignEntity);
             return campaignEntity.ToResponse();
         }
-
+        
+        /// <summary>
+        /// Shares a campaign with a user.
+        /// </summary>
+        /// <param name="campaignId">The ID of the campaign to share.</param>
+        /// <param name="userId">The ID of the user with whom to share the campaign.</param>
         public async Task ShareCampaign(string campaignId, string userId)
         {
             var update = Builders<Campaign>.Update.AddToSet(c => c.PlayerIds, userId);
